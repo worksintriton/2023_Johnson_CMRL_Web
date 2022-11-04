@@ -1,0 +1,116 @@
+
+<div class="col-md-12 p-0">
+    <div class="page-title">Preventive Maintenance </div>
+
+  
+
+    <div class="row pt-2" *ngIf="(this.user[0].user_type == 1) && (this.user[0].admin == true)">
+      <div class="col-md-10 mt-2 p-0 pl-3 mb-2">
+        <button mat-raised-button class="btnnn-prime-fn">
+            <a style="color:#ffff ;" href="http://cmrl.johnsonliftsltd.net:3000/api/uploads/sampleformat.xlsx">Download Sample Template</a>
+         </button>
+      </div>
+      <div class="col-md-2 p-0 example-button-container pr-3" >
+        <button style="float: right;" mat-mini-fab color="primary"   matTooltip="Upload Excel Data" (click)="addRecord()"> + </button>
+      </div>
+    </div>
+
+    <div class="row outline m-0 mt-2 mb-2 p-0">
+     
+  
+        <div class="col-12 pt-1 page-sub-title-2">Search</div>
+        <div class="col-md-3 pull-left">
+                <mat-form-field class="pt-2" appearance="outline">
+                    <mat-label for="">Type</mat-label>
+                    <mat-select  [(ngModel)]="type">
+                      <mat-option value="LIFT">LIFT</mat-option>
+                      <mat-option value="ESCALATOR">ESCALATOR</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </div>
+            <div class="col-md-3 pt-4 pull-left">
+                <button mat-raised-button (click)="submitData()" class="btnnn-prime-fn">Search</button>&nbsp;&nbsp;
+            </div>
+       
+    </div>
+
+
+
+    <div class="mat-table-container" id="test1" #test1>
+
+        <table mat-table [dataSource]="dataSource" matSort >
+
+            <ng-container matColumnDef="month">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> month </th>
+                <td mat-cell *matCellDef="let element"> {{element?.month}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> type</th>
+                <td mat-cell *matCellDef="let element"> {{element?.type}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="location">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> location</th>
+                <td mat-cell *matCellDef="let element"> {{element?.location}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="escalatorId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> escalatorId</th>
+                <td mat-cell *matCellDef="let element"> {{element?.escalatorId}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="plannedDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> plannedDate</th>
+                <td mat-cell *matCellDef="let element"> {{element?.plannedDate}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="completedDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> completedDate</th>
+                <td mat-cell *matCellDef="let element"> {{element?.completedDate}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="componentsReplaced">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> componentsReplaced</th>
+                <td mat-cell *matCellDef="let element"> {{element?.componentsReplaced}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="partsDescription">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> partsDescription</th>
+                <td mat-cell *matCellDef="let element"> {{element?.partsDescription}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="qty">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> qty</th>
+                <td mat-cell *matCellDef="let element"> {{element?.qty}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> actions</th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button matTooltip="View" (click)="viewRecord(element)">
+                        <mat-icon class="edit-mat-icon">visibility</mat-icon>
+                    </button>
+
+                
+                    <button mat-icon-button matTooltip="Delete"   (click)="deleteRecord(element)">
+                        <mat-icon class="delete-mat-icon">delete</mat-icon>
+                    </button>
+                </td>
+            
+            </ng-container>
+
+          
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSize]="PAGE_SIZE" [pageSizeOptions]="PAGINATION_RANGE" showFirstLastButtons></mat-paginator>
+    </div>
+   
+   
+    
+
+
+</div>

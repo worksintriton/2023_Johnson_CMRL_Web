@@ -1,0 +1,63 @@
+
+<div class="col-md-12 p-0">
+    <div class="page-title">Parts Data</div>
+
+    <div class="outline mb-2">
+      <div class="row pl-3">
+       <div class="p-3">  <b>Ticket No</b> :   </div> <div class="pt-3">  TIC001 </div>&nbsp;&nbsp;&nbsp;
+       <div class="p-3">  <b>CMRL COMMENTS </b> :   </div> <div class="pt-3">  Car cabin lamp not glowing </div>&nbsp;&nbsp;&nbsp;
+       <div class="p-3">  <b>TYPE</b> :   </div> <div class="pt-3">  Lift </div>&nbsp;&nbsp;&nbsp;
+       <div class="p-3">  <b>BREAK DOWN TIME</b> :   </div> <div class="pt-3">  	
+        01-07-2021 3:00 PM
+      
+         </div>&nbsp;&nbsp;&nbsp;
+       <div class="p-3">  <b>RESTORED TIME</b> :   </div> <div class="pt-3">    01-07-2021 4:45 PM </div>&nbsp;&nbsp;&nbsp;
+       <div class="p-3">  <b>STATUS</b> :   </div> <div class="pt-3">  Close </div>&nbsp;&nbsp;&nbsp;
+       <!-- <br>
+       <div class="p-3">  <b>STATION NAME</b> :   </div> <div class="pt-3">  TIC001 </div>&nbsp;&nbsp;&nbsp;
+       <div class="p-3">  <b>FAULT TYPE</b> :   </div> <div class="pt-3">  TIC001 </div>&nbsp;&nbsp;&nbsp; -->
+
+      </div>
+
+    </div>
+
+  <div class="mat-table-container" id="test1" #test1>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort matTableResponsive>
+    <!-- Dynamic Column -->
+    <div *ngFor="let displayCol of displayedColumns; let i = index" matColumnDef="{{ displayCol }}">
+    <th mat-header-cell class="field-title" *matHeaderCellDef mat-sort-header> {{ displayedLabelColumns[i] }} </th>
+  
+      <ng-container *matCellDef="let element" [ngSwitch]="displayCol">
+        <td mat-cell *ngSwitchCase="'actions'" (click)="$event.stopPropagation()">
+          <button mat-icon-button  matTooltip="Edit"
+          (click)="editRecord(element)">
+          <mat-icon class="edit-mat-icon">edit</mat-icon>
+        </button>
+
+        <button mat-icon-button  matTooltip="Delete"
+        (click)="deleteRecord(element)">
+          <mat-icon class="delete-mat-icon">delete</mat-icon>
+        </button>
+
+        </td>
+        <td mat-cell *ngSwitchCase="'createdDate'">
+          {{ element[displayCol] | date: DATE_FORMAT }}
+        </td>
+        <td mat-cell *ngSwitchCase="'updatedDate'">
+          {{ element[displayCol] | date: DATE_FORMAT }}
+        </td>
+         <td mat-cell *ngSwitchDefault>
+         <div *ngIf="!element[displayCol]">-</div>
+         <div *ngIf="element[displayCol]">{{ element[displayCol] }}</div>
+         </td>
+      </ng-container>
+    </div>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" ></tr>
+  </table>
+  </div>
+
+
+  <mat-paginator [pageSize]="PAGE_SIZE" [pageSizeOptions]="PAGINATION_RANGE" showFirstLastButtons></mat-paginator>
+</div>
+
