@@ -71,8 +71,8 @@ export class TicketDetailsComponent implements OnInit {
 
    }
 
-  public displayedColumns: string[] = ['ticket_no','break_down_observed','type','break_down_time','restored_time','duration','ram','status','station_name','fault_type','createdDate',  'parts', 'parts_replaced',"actions"];
-  public displayedLabelColumns: string[] = ['ticket no','CMRL comments','type','break down time','restored time','duration','RAM','status','station name','fault type','created Date', 'parts', 'parts replaced','Action'];
+  public displayedColumns: string[] = ['ticket_no','break_down_observed','type','break_down_time','restored_time','duration','ram','status','station_name','fault_type','createdDate', "actions"];
+  public displayedLabelColumns: string[] = ['ticket no','CMRL comments','type','break down time','restored time','duration','Penalty','status','station name','fault type','created Date', 'Action'];
   dataSource: MatTableDataSource<Product>;
   
 
@@ -107,6 +107,7 @@ export class TicketDetailsComponent implements OnInit {
     this.adminService.getstationBasedTicketList().pipe()
     .subscribe( async data => {
         this.List = data['Data'];
+        console.log("this.List",this.List);
       await this.List.forEach(tic_element => {
           this.stationList.forEach(station_element => {
           if(tic_element.station_id == station_element._id){
@@ -126,20 +127,70 @@ export class TicketDetailsComponent implements OnInit {
       });
   }
 
-  dateformat(data){
-    if(data){
-      let dbdate = data;
-      let temp1 = dbdate.split(" ");
-      let temp2 = temp1[0].split("-");
-      let temp3 = temp1[1].split(":");
-      let temp4 = +temp3[0]
-      if(temp1[2] == "PM" || temp1[2] == "AM"){
-        temp4 = +temp4 + 12;
-      }
-      let final = temp2[2]+"-"+temp2[1]+"-"+temp2[0]+"T"+temp4+":"+temp3[1]+":00.000Z";
-      return final;
+  // dateformat(data){
+  //   if(data){
+  //     let dbdate = data;
+  //     let temp1 = dbdate.split(" ");
+  //     let temp2 = temp1[0].split("-");
+  //     let temp3 = temp1[1].split(":");
+  //     let temp4 = +temp3[0]
+  //     if(temp1[2] == "PM" || temp1[2] == "AM"){
+  //       // temp4 = +temp4 + 12;
+  //       temp4 = +temp4 ;
+  //     }
+  //     let final = temp2[2]+"-"+temp2[1]+"-"+temp2[0]+"T"+temp4+":"+temp3[1]+":00.000Z";
+  //     return final;
+  //   }
+  // }
+
+
+//    dateformat(data){
+//     if(data){
+//       debugger
+//       let dbdate = data;
+//       let temp1 = dbdate.split(" ");
+//       let temp2 = temp1[0].split("-");
+//       let temp3 = temp1[1].split(":");
+//       let temp4 = +temp3[0]
+//       if(temp1[2] == "AM"){
+//         temp4 = +temp4;
+//       }
+
+//       if((temp1[2] == "PM") && temp1[2] < 12){
+//         temp4 = +temp4 + 12;
+//       }
+
+//       let final = temp2[2]+"-"+temp2[1]+"-"+temp2[0]+"T"+temp4+":"+temp3[1]+":00.000Z";
+//       return final;
+//     }
+// }
+
+
+ dateformat(data){
+  if(data){
+    let dbdate = data;
+    let temp1 = dbdate.split(" ");
+    let temp2 = temp1[0].split("-");
+    let temp3 = temp1[1].split(":");
+    let temp4 = temp3[0];
+ 
+
+    if(temp1[2] == "AM"){
+      temp4 = +temp4;
     }
+
+    if(temp1[2] == "PM" && +temp4 < 12){
+      temp4 = +temp4 + 12;
+    }
+
+    if(temp4 < 10){
+      temp4 = "0"+temp4;
+    }
+    // console.log("temp1[2]",temp4);
+    let final = temp2[2]+"-"+temp2[1]+"-"+temp2[0]+"T"+temp4+":"+temp3[1]+":00.000Z";
+    return final;
   }
+}
 
 
    millisToMinutesAndSeconds(millis) {
@@ -150,7 +201,8 @@ export class TicketDetailsComponent implements OnInit {
       minutes + ":" + (parseInt(seconds) < 10 ? "0" : "") + seconds)
   }
 
-  loadRecord() {
+  loadRecord() { 
+    // console.log("this.List",this.List);
     this.dynamicTableData = [];
     this.List.forEach(element => {
         if(element.break_down_time && element.restored_time){
@@ -158,15 +210,24 @@ export class TicketDetailsComponent implements OnInit {
             "created_date": this.dateformat(element.break_down_time.toUpperCase()),
             "current_time": this.dateformat(element.restored_time.toUpperCase())
           };
-        function getDataDiff(startDate, endDate) {
-            var diff = endDate.getTime() - startDate.getTime();
-            var days = Math.floor(diff / (60 * 60 * 24 * 1000));
-            var hours = Math.floor(diff / (60 * 60 * 1000)) - (days * 24);
-            var minutes = Math.floor(diff / (60 * 1000)) - ((days * 24 * 60) + (hours * 60));
-            var seconds = Math.floor(diff / 1000) - ((days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60));
-            return { day: days, hour: hours, minute: minutes, second: seconds };
-        }
-        var diff = getDataDiff(new Date(inputJSON.created_date), new Date(inputJSON.current_time));
+          console.log("inputJSON",inputJSON);
+  
+      function getDataDiff(startDate, endDate) {
+          var diff = endDate.getTime() - startDate.getTime();
+          var days = Math.floor(diff / (60 * 60 * 24 * 1000));
+          var hours = Math.floor(diff / (60 * 60 * 1000)) - (days * 24);
+          var minutes = Math.floor(diff / (60 * 1000)) - ((days * 24 * 60) + (hours * 60));
+          var seconds = Math.floor(diff / 1000) - ((days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60));
+          return { day: days, hour: hours, minute: minutes, second: seconds };
+      }
+
+      var diff = getDataDiff(new Date(inputJSON.created_date), new Date(inputJSON.current_time));
+      // console.log(diff);
+
+      
+       
+       
+        // var diff = getDataDiff(new Date(inputJSON.created_date), new Date(inputJSON.current_time));
         var duration  = diff.day+ " Day : " + diff.hour + " Hour : " + diff.minute + " Minute " ;
         if(diff.day == 1){
           if(diff.minute > 1){
@@ -207,8 +268,10 @@ export class TicketDetailsComponent implements OnInit {
         break_down_time:element.break_down_time,
         restored_time:element.restored_time,
         duration:temp2,
+        // duration:"-",
         status:element.status,
         ram : temp,
+        // ram : "-",
         fault_type:element.fault_type,
         createdDate: element.create_date_time,
         updatedDate: element.updatedAt,
@@ -237,10 +300,11 @@ export class TicketDetailsComponent implements OnInit {
 
 
    // Reditrect
-   viewRecord(ticket_no) {
+   viewRecord(ele) {
 
     let navigationExtras: NavigationExtras = {
-      queryParams: { ticket_no: ticket_no }
+      queryParams: { ticket_no: ele.ticket_no ,break_down_time:ele.break_down_time,restored_time:ele.restored_time,
+      }
     };
 
     // Navigate to the view manage test page with extras
@@ -249,10 +313,10 @@ export class TicketDetailsComponent implements OnInit {
 
 
   viewPartsRecord(ticket_no) {
-    // let navigationExtras: NavigationExtras = {
-    //   queryParams: { ticket_no: ticket_no }
-    // };
-    this.router.navigate(['/view-parts']);
+    let navigationExtras: NavigationExtras = {
+      queryParams: { ticket_no: ticket_no }
+    };
+    this.router.navigate(['/view-parts'],navigationExtras);
   }
 
   public editRecord(items) {

@@ -30,6 +30,17 @@
           <mat-icon class="edit-mat-icon">edit</mat-icon>
         </button>
           </td>
+
+          <td mat-cell *ngSwitchCase="'parts'" >
+            <button mat-icon-button matTooltip="View" (click)="viewPartsRecord(element)" *ngIf="element.parts_replaced =='Yes'">
+              <mat-icon class="edit-mat-icon">visibility</mat-icon>
+            </button>
+          </td>
+
+
+       
+
+    
           
           
           <td mat-cell *ngSwitchCase="'createdDate'">

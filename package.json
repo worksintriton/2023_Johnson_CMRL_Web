@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "~8.2.4",
     "@angular/router": "~8.2.4",
     "@ng-bootstrap/ng-bootstrap": "^5.1.1",
+    "@syncfusion/ej2-pdf-export": "^20.3.56",
     "bootstrap": "^4.3.1",
     "file-saver": "^2.0.5",
     "html2canvas": "^1.0.0-rc.7",

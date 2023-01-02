@@ -279,5 +279,15 @@ export class AdminModulesService {
       return this.http.post(CommonConstants.WEBAPI_URL+'preventive_data/delete_month_wise',data)
     }
 
-    
+
+    fetch_job_no_by_type(data:any){
+      return this.http.post(CommonConstants.WEBAPI_URL+'preventive_data/fetch_job_no_by_type',data)
+    }
+
+    excel_export_data(data:any){
+      return this.http.post(CommonConstants.WEBAPI_URL+'preventive_data/excel_export_data',data)
+    }
+
+
+    //
 }

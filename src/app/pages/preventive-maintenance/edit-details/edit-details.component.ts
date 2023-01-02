@@ -39,7 +39,8 @@ export class EditDetailsComponent implements OnInit {
       "qty": [''],
       "remarks": [''],
       "date_of_update": [''],
-      "reportno":['']
+      "reportno":[''],
+      "replacement_date":['']
     });
     this.fillForm(datas);
   }
@@ -84,7 +85,9 @@ export class EditDetailsComponent implements OnInit {
   }
 
   private fillForm(parsedData) {
-
+    debugger;
+    var tempplanneddate = parsedData.plannedDate.slice(0, 10);
+    console.log("tempplanneddate",tempplanneddate);
     this.addEditForm.patchValue({
       
     
@@ -93,14 +96,15 @@ export class EditDetailsComponent implements OnInit {
       "location": parsedData.location,
       "escalatorId": parsedData.escalatorId,
       "jobNo": parsedData.jobNo,
-      "plannedDate": parsedData.plannedDate,
+      "plannedDate": tempplanneddate,
       "completedDate": parsedData.completedDate,
       "componentsReplaced": parsedData.componentsReplaced,
       "partsDescription": parsedData.partsDescription,
       "qty": parsedData.qty,
       "remarks": parsedData.remarks,
       "date_of_update": parsedData.date_of_update,
-      "reportno":parsedData.reportno
+      "reportno":parsedData.reportno,
+      "replacement_date":parsedData.replacement_date
       
     });
   }

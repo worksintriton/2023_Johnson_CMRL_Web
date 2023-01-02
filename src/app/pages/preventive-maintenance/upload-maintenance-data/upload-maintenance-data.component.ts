@@ -42,7 +42,7 @@ export class UploadMaintenanceDataComponent implements OnInit {
     private route: ActivatedRoute, private adminModulesService: AdminModulesService, public dialog: MatDialog) { 
       this.createMonth ="";
       this.type ="";
-
+debugger
       this.user = this.authService.currentUser();
       this.route.queryParams.subscribe(params => {
         this.month = params['month'];
@@ -51,26 +51,26 @@ export class UploadMaintenanceDataComponent implements OnInit {
       });
     }
 
-  public displayedColumns: string[] = ['key','location', 'escalatorId','jobNo','plannedDate','reportno'];
-  public displayedLabelColumns: string[] = ['key','location', 'escalator Id','job No','planned Date','reportno'];
+  public displayedColumns: string[] = ['rno','key','location', 'escalatorId','jobNo','plannedDate','reportno'];
+  public displayedLabelColumns: string[] = ['rno','key','location', 'escalator Id','job No','planned Date','reportno'];
   dataSource!: MatTableDataSource<any>;
 
   ngOnInit() {
     // console.log("this.user",this.user);
-
+  
    
     if(this.view == "true"){
-      this.displayedColumns= ['location', 'escalatorId','jobNo','plannedDate','completedDate','reportno','componentsReplaced','partsDescription','qty','actions'];
-      this.displayedLabelColumns= ['location', 'escalator Id','job No','planned Date','completed Date','report no','components Replaced','parts Description','qty','actions'];
+      this.displayedColumns= ['rno','location', 'escalatorId','jobNo','plannedDate','completedDate','reportno','replacement_date','componentsReplaced','partsDescription','qty','actions'];
+      this.displayedLabelColumns= ['rno','location', 'escalator Id','job No','planned Date','completed Date','report no','replacement_date','components Replaced','parts Description','qty','actions'];
       this.loadRecord();
     }
 
     if(this.user[0].user_type == 1 && this.user[0].admin == true){
-      this.displayedColumns= ['location', 'escalatorId','jobNo','plannedDate','completedDate','reportno','componentsReplaced','partsDescription','qty','actions'];
-      this.displayedLabelColumns= ['location', 'escalator Id','job No','planned Date','completed Date','report no','components Replaced','parts Description','qty','actions'];
+      this.displayedColumns= ['rno','location', 'escalatorId','jobNo','plannedDate','completedDate','reportno','replacement_date','componentsReplaced','partsDescription','qty','actions'];
+      this.displayedLabelColumns= ['rno','location', 'escalator Id','job No','planned Date','completed Date','report no','replacement_date','components Replaced','parts Description','qty','actions'];
     }else{
-      this.displayedColumns= ['location', 'escalatorId','jobNo','plannedDate','completedDate','reportno','componentsReplaced','partsDescription','qty'];
-      this.displayedLabelColumns= ['location', 'escalator Id','job No','planned Date','completed Date','report no','components Replaced','parts Description','qty'];
+      this.displayedColumns= ['rno','location', 'escalatorId','jobNo','plannedDate','completedDate','reportno','replacement_date','componentsReplaced','partsDescription','qty'];
+      this.displayedLabelColumns= ['rno','location', 'escalator Id','job No','planned Date','completed Date','report no','replacement_date','components Replaced','parts Description','qty'];
     }
 
   }
@@ -102,6 +102,11 @@ export class UploadMaintenanceDataComponent implements OnInit {
     
     }
     reader.readAsBinaryString(file);
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
 
@@ -168,6 +173,51 @@ export class UploadMaintenanceDataComponent implements OnInit {
       console.log("deleteSingleRecord ", data);
      this.ngOnInit();
     });
+  }
+
+
+  exportData(){
+
+    if(this.type == "LIFT" || this.types == "LIFT"){
+      let new_list = this.dataSource.filteredData.map(function(obj,i) {
+        return {
+          "S no":i+1,
+          "Location": obj.location,
+          "LIFT":obj.escalatorId,
+          "Job no":obj.jobNo,
+          "Planned date":obj.plannedDate,
+          "Completed date" : obj.completedDate,
+          "Report no":obj.reportno,
+          "Componenets replaced":obj.componentsReplaced,
+          "Parts Description":obj.partsDescription,
+          "Replacement Date":obj.replacement_date,
+          "QTY":obj.qty,
+          "Remarks":obj.remarks,
+        }
+      });
+      
+    this.exportToExcelService.exportAsExcelFile(new_list, "Job Details",);
+    }else {
+      let new_list = this.dataSource.filteredData.map(function(obj,i) {
+        return {
+          "S no":i+1,
+          "Location": obj.location,
+          "ESCALATOR":obj.escalatorId,
+          "Job no":obj.jobNo,
+          "Planned date":obj.plannedDate,
+          "Completed date" : obj.completedDate,
+          "Report no":obj.reportno,
+          "Componenets replaced":obj.componentsReplaced,
+          "Parts Description":obj.partsDescription,
+          "Replacement Date":obj.replacement_date,
+          "QTY":obj.qty,
+          "Remarks":obj.remarks,
+        }
+      });
+      
+    this.exportToExcelService.exportAsExcelFile(new_list, "Job Details",);
+    }
+  
   }
 
 }

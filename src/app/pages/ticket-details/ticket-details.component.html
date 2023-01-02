@@ -51,7 +51,7 @@
             <mat-select formControlName="status" multiple>
               <mat-option value="Open">Open</mat-option>
               <mat-option value="Pending">Pending</mat-option>
-              <mat-option value="Inprogress ">Inprogress </mat-option>
+              <mat-option value="Inprogress">Inprogress </mat-option>
               <mat-option value="Completed">Completed</mat-option>
               <mat-option value="Close">Closed</mat-option>
 
@@ -109,7 +109,7 @@
         <ng-container *matCellDef="let element" [ngSwitch]="displayCol">
 
           <td mat-cell *ngSwitchCase="'actions'">
-            <button mat-icon-button matTooltip="View" (click)="viewRecord(element.ticket_no)" >
+            <button mat-icon-button matTooltip="View" (click)="viewRecord(element)" >
               <mat-icon class="edit-mat-icon">visibility</mat-icon>
             </button>
 
@@ -118,16 +118,7 @@
             </button>
           </td>
 
-          <td mat-cell *ngSwitchCase="'parts'">
-            <button mat-icon-button matTooltip="View" (click)="viewPartsRecord(element.ticket_no)" *ngIf="element.ticket_no=='TIC-1'">
-              <mat-icon class="edit-mat-icon">visibility</mat-icon>
-            </button>
-          </td>
-
-          <td mat-cell *ngSwitchCase="'parts_replaced'">
-          <div *ngIf="element.ticket_no=='TIC-1'">Yes</div>
-          </td>
-
+         
 
 
 

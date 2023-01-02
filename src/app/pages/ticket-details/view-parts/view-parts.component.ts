@@ -36,48 +36,58 @@ export class ViewPartsComponent implements OnInit {
   types: any;
   view: any;
   salesPersonList: any;
+  ticket_no: any;
+  private _id: any;
+  break_down_time: any;
+  restored_time: any;
 
-  constructor(private exportToExcelService: ExportToExcelService,
+  constructor(private exportToExcelService: ExportToExcelService,private adminService:AdminModulesService,
     private route: ActivatedRoute, private adminModulesService: AdminModulesService, public dialog: MatDialog) { 
 
       this.route.queryParams.subscribe(params => {
-        // this.month = params['month'];
-       
+        this.ticket_no = params['ticket_no'];
+        this._id = params['_id'];
+        this.break_down_time = params['break_down_time'];
+        this.restored_time = params['restored_time'];
+        
+        
+        console.log("menuId ",this.ticket_no);
       });
+  
     }
 
-    public displayedColumns: string[] = ['part_type','part_name','part_no','createdDate',  'updatedDate',];
-    public displayedLabelColumns: string[] = ['type','parts Name','parts No','created Date',  'updated Date', ];
+    public displayedColumns: string[] = ['part_type','part_name','part_no',];
+    public displayedLabelColumns: string[] = ['type','parts Name','parts No'];
   dataSource!: MatTableDataSource<any>;
 
   ngOnInit() {
-   this.getAllCustomer();
+   this.getAllRecords();
 
   }
 
  
+  getAllRecords(){
 
-
-  getAllCustomer(){
-    this.adminModulesService.getpartList().pipe()
+    this.adminService.getSelectedTicketList(this.ticket_no).pipe()
     .subscribe( data => {
-        console.log("data ",data);
-        this.salesPersonList = data['Data'];
+        console.log("getSelectedTicketList ",data);
+        var listData = data['Data'];
+        this.List = listData && listData.filter(ele => ele._id == this._id)
         this.loadRecord();
-      },);
+      });
   }
+
+
 
 
   loadRecord() {
 
     this.dynamicTableData = [];
-    this.salesPersonList.forEach(element => {
+    this.List && this.List[0].part_det.forEach(element => {
       let row: any = {
         part_type: element.part_type && element.part_type == 1 ?  "LIFT" : "ESCALATORS",
         part_name: element.part_name,
         part_no: element.part_no,
-        createdDate: element.createdAt,
-        updatedDate: element.updatedAt,
         unique_id:element.unique_id,
         _id:element._id
       }

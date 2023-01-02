@@ -3,10 +3,10 @@
     <button class="dialog-close-btn" (click)="dialogRef.close()">X</button>
 </div>
 
-<section mat-dialog-content>
+<!-- <section > -->
 
-    <div class="col-md-12">
-        <form [formGroup]="addEditForm">
+    <!-- <div class="col-md-12"> -->
+        <form [formGroup]="addEditForm" mat-dialog-content>
     
            
               
@@ -55,6 +55,13 @@
               </mat-form-field>
 
               <mat-form-field class="col-md-6 pt-2" appearance="outline">
+                <mat-label class="">Replacement Date</mat-label>
+                <input matInput   formControlName="replacement_date" type="date"   />
+              </mat-form-field>
+
+              
+
+              <mat-form-field class="col-md-6 pt-2" appearance="outline">
                 <mat-label class="">Components Replaced</mat-label>
                 <input matInput   formControlName="componentsReplaced" type="text"   />
               </mat-form-field>
@@ -84,10 +91,10 @@
              
     
     </form>
-    </div>
+    <!-- </div> -->
     
  
-</section>
+<!-- </section> -->
 <div mat-dialog-actions style="float: right;" class="pull-right pr-2">
     <button mat-button class="btnnn-default-fn" (click)="dialogRef.close()">
         Cancel

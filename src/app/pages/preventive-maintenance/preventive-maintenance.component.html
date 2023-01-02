@@ -1,44 +1,76 @@
-
 <div class="col-md-12 p-0">
-    <div class="page-title">Preventive Maintenance </div>
+    <div class="page-title pt-0 pb-0">Preventive Maintenance </div>
 
-  
+    <div class="row outline ml-2  mr-2 pt-0 pb-0">
+        <mat-form-field class="col-md-3 pt-2" appearance="outline">
+            <mat-label for="">Type</mat-label>
+            <mat-select [(ngModel)]="istype" (selectionChange)='onOptionsSelected()'>
+                <mat-option value="LIFT">LIFT</mat-option>
+                <mat-option value="ESCALATOR">ESCALATOR</mat-option>
+            </mat-select>
+        </mat-form-field>
 
-    <div class="row pt-2" *ngIf="(this.user[0].user_type == 1) && (this.user[0].admin == true)">
-      <div class="col-md-10 mt-2 p-0 pl-3 mb-2">
-        <button mat-raised-button class="btnnn-prime-fn">
-            <a style="color:#ffff ;" href="http://cmrl.johnsonliftsltd.net:3000/api/uploads/sampleformat.xlsx">Download Sample Template</a>
-         </button>
-      </div>
-      <div class="col-md-2 p-0 example-button-container pr-3" >
-        <button style="float: right;" mat-mini-fab color="primary"   matTooltip="Upload Excel Data" (click)="addRecord()"> + </button>
-      </div>
+        <mat-form-field class="col-md-3 pt-2" appearance="outline">
+            <mat-label for="">Job No</mat-label>
+            <mat-select [(ngModel)]="job_no" (selectionChange)='onOptionsSelected()'>
+                <mat-option *ngFor="let item of fetch_job_no_by_type" [value]="item.job_no">{{item.job_no}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-2 pt-2" appearance="outline">
+            <mat-label class="">From Date</mat-label>
+            <input [(ngModel)]="start_date" matInput type="date"   />
+          </mat-form-field>
+
+
+          <mat-form-field class="col-md-2 pt-2" appearance="outline">
+            <mat-label class="">To Date</mat-label>
+            <input [(ngModel)]="end_date" matInput type="date"   />
+          </mat-form-field>
+
+          <div class="col-md-2 pt-4 pull-left">
+            <button mat-raised-button (click)="exportData()" class="btnnn-prime-fn">Export</button>&nbsp;&nbsp;
+        </div>
     </div>
 
-    <div class="row outline m-0 mt-2 mb-2 p-0">
-     
-  
-        <div class="col-12 pt-1 page-sub-title-2">Search</div>
+    <div class="row ml-1 pt-0 pb-0" *ngIf="(this.user[0].user_type == 1) && (this.user[0].admin == true)">
+        <div class="col-md-10 mt-2 p-0 pl-3 mb-2">
+            <button mat-raised-button class="btnnn-prime-fn">
+                <a style="color:#ffff ;"
+                    href="http://cmrl.johnsonliftsltd.net:3000/api/uploads/sampleformat.xlsx">Download Sample
+                    Template</a>
+            </button>
+        </div>
+        <div class="col-md-2 p-0 example-button-container pr-3">
+            <button style="float: right;" mat-mini-fab color="primary" matTooltip="Upload Excel Data"
+                (click)="addRecord()"> + </button>
+        </div>
+    </div>
+
+    <div class="row  m-0 p-0">
+
+
+        <!-- <div class="col-12 pt-1 page-sub-title-2">Search</div> -->
         <div class="col-md-3 pull-left">
-                <mat-form-field class="pt-2" appearance="outline">
-                    <mat-label for="">Type</mat-label>
-                    <mat-select  [(ngModel)]="type">
-                      <mat-option value="LIFT">LIFT</mat-option>
-                      <mat-option value="ESCALATOR">ESCALATOR</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-            </div>
-            <div class="col-md-3 pt-4 pull-left">
-                <button mat-raised-button (click)="submitData()" class="btnnn-prime-fn">Search</button>&nbsp;&nbsp;
-            </div>
-       
+            <mat-form-field class="pt-2" appearance="outline">
+                <mat-label for="">Search Type</mat-label>
+                <mat-select [(ngModel)]="type">
+                    <mat-option value="LIFT">LIFT</mat-option>
+                    <mat-option value="ESCALATOR">ESCALATOR</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-md-3 pt-4 pull-left">
+            <button mat-raised-button (click)="submitData()" class="btnnn-prime-fn">Search</button>&nbsp;&nbsp;
+        </div>
+
     </div>
 
 
 
     <div class="mat-table-container" id="test1" #test1>
 
-        <table mat-table [dataSource]="dataSource" matSort >
+        <table mat-table [dataSource]="dataSource" matSort>
 
             <ng-container matColumnDef="month">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> month </th>
@@ -94,23 +126,23 @@
                         <mat-icon class="edit-mat-icon">visibility</mat-icon>
                     </button>
 
-                
-                    <button mat-icon-button matTooltip="Delete"   (click)="deleteRecord(element)">
+
+                    <button mat-icon-button matTooltip="Delete" (click)="deleteRecord(element)">
                         <mat-icon class="delete-mat-icon">delete</mat-icon>
                     </button>
                 </td>
-            
+
             </ng-container>
 
-          
+
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
         </table>
         <mat-paginator [pageSize]="PAGE_SIZE" [pageSizeOptions]="PAGINATION_RANGE" showFirstLastButtons></mat-paginator>
     </div>
-   
-   
-    
+
+
+
 
 
 </div>

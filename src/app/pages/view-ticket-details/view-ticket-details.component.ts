@@ -8,7 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService } from "src/app/core/services/auth.service";
 import { User } from "src/app/core/models/auth.models";
 import { AdminModulesService } from "src/app/core/services/admin/admin-modules.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
 import { ViewTicketImageComponent } from "./view-ticket-image/view-ticket-image.component";
 import { SingleTicketEditComponent } from "./single-ticket-edit/single-ticket-edit.component";
 
@@ -21,6 +21,7 @@ export class Product {
   createdDate: string;
   updatedDate: string;
   ticket_photo:any;
+  parts_replaced:any;
   _id : string;
 }
 
@@ -45,18 +46,25 @@ export class ViewTicketDetailsComponent implements OnInit {
   ticket_no: any;
   Days: any = '';
   penalty: any;
+  restored_time: any;
+  break_down_time: any;
 
-  constructor(public dialog: MatDialog,private adminService:AdminModulesService, private route: ActivatedRoute,)
+  constructor(public dialog: MatDialog,private adminService:AdminModulesService, private router :Router,
+    private route: ActivatedRoute,)
    {
     this.route.queryParams.subscribe(params => {
       this.ticket_no = params['ticket_no'];
+      this.restored_time = params['restored_time'];
+      this.break_down_time = params['break_down_time'];
+      
+      
       console.log("menuId ",this.ticket_no);
     });
 
    }
 
-  public displayedColumns: string[] = ['ticket_no','date_of_create','ticket_comments','ticket_status','viewImg'];
-  public displayedLabelColumns: string[] = ['ticket no','date','ticket comments','ticket status','viewImg'];
+  public displayedColumns: string[] = ['ticket_no','date_of_create','ticket_comments','ticket_status', 'parts', 'parts_replaced','viewImg'];
+  public displayedLabelColumns: string[] = ['ticket no','date','ticket comments','ticket status', 'parts', 'parts_replaced','viewImg'];
   dataSource: MatTableDataSource<Product>;
 
   ngOnInit() {
@@ -76,7 +84,12 @@ export class ViewTicketDetailsComponent implements OnInit {
   }
 
 
-
+  viewPartsRecord(ele) {
+    let navigationExtras: NavigationExtras = {
+      queryParams: { ticket_no: ele.ticket_no,_id:ele._id,break_down_time:this.break_down_time,restored_time:this.restored_time }
+    };
+    this.router.navigate(['/view-parts'],navigationExtras);
+  }
 
 
   loadRecord() {
@@ -94,7 +107,8 @@ export class ViewTicketDetailsComponent implements OnInit {
         createdDate: element.createdAt,
         updatedDate: element.updatedAt,
         ticket_photo:element.ticket_photo,
-        _id : element._id
+        parts_replaced:element.ticket_status == "Completed" ? "Yes" :"No",
+        _id : element._id,
       }
       this.dynamicTableData.push(row);
     })
